@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include  <sys/types.h>
-#include  <sys/wait.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include "unistd.h"
 
 void readLine(char *line);
@@ -54,21 +54,21 @@ void createArgs(char *str, char **argVect){
 }
 
 void execute(char **args){
-    pid_t pid;
-    int status;
+    pid_t id;
+    int stat;
 
-    if ((pid = fork()) < 0) {
+    if ((id = fork()) < 0) {
           printf("%s\n", "Fork failed");;
           exit(1);
      }
-     else if (pid == 0) {
+     else if (id == 0) {
           if (execvp(*args, args) < 0) {
                printf("%s\n", "command not found: try again");
                exit(1);
           }
      }
      else {
-          while (wait(&status) != pid)
+          while (wait(&stat) != id)
           ;
      }
 }
