@@ -1,10 +1,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include  <sys/types.h>
+#include  <sys/wait.h>
+#include "unistd.h"
 
 void readLine(char *line);
 void loop();
 void createArgs(char *str, char **argVect);
+void execute(char **args);
+
 
 int main() {
 
@@ -24,6 +29,7 @@ void loop(){
     if (strcmp(args[0], "exit") == 0) {
       break;
     }
+    execute(args);
   }
 
 }
@@ -47,14 +53,22 @@ void createArgs(char *str, char **argVect){
 
 }
 
-/*
-int i = 0;
-while(i<10){
-  printf("%c\n", *str);
-  //*str++;
-  i++;
+void execute(char **args){
+    pid_t pid;
+    int status;
+
+    if ((pid = fork()) < 0) {
+          printf("%s\n", "Fork failed");;
+          exit(1);
+     }
+     else if (pid == 0) {
+          if (execvp(*args, args) < 0) {
+               printf("%s\n", "command not found: try again");
+               exit(1);
+          }
+     }
+     else {
+          while (wait(&status) != pid)
+          ;
+     }
 }
-
-
-
-*/
